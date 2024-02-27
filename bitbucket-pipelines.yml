@@ -1,0 +1,39 @@
+image: node:latest
+
+definitions:
+  steps:
+    - step: &build-deploy
+        name: Build & Deploy
+        script:
+          - pipe: atlassian/ssh-run:0.4.2
+            variables:
+              SSH_USER: $CI_USERNAME
+              SERVER: $CI_HOST
+              COMMAND: './scripts/update.sh'
+              MODE: 'script'
+          - npm install
+          - export NODE_OPTIONS="--max-old-space-size=4096"
+          - npm run $CI_BUILD_SCRIPT --verbose
+          - apt-get update && apt-get install -y rsync openssh-client
+          - echo 'HostKeyAlgorithms +ssh-rsa' >> ~/.ssh/config
+          - echo 'PubkeyAcceptedAlgorithms +ssh-rsa' >> ~/.ssh/config
+          - rsync -e "ssh -p $CI_PORT" --delete --force --fake-super --owner --group -r dist/ $CI_USERNAME@$CI_HOST:/var/www/html/logistic-management-system-backend/dist
+          - pipe: atlassian/ssh-run:0.4.2
+            variables:
+              SSH_USER: $CI_USERNAME
+              SERVER: $CI_HOST
+              COMMAND: './scripts/serve.sh'
+              MODE: 'script'
+          
+pipelines:
+  branches:
+    main:
+      - step:
+          <<: *build-deploy
+          name: Build & Deploy to Development
+          deployment: development
+      - step:
+          <<: *build-deploy
+          name: Build & Deploy to Production
+          deployment: production
+          trigger: manual
