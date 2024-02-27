@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "API of Logistic Management System by Tekko.id",
+    "title": "Express JS with Postre Starter Kit",
     "version": "0.0.1"
   },
   "schemes": [

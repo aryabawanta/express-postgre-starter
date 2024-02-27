@@ -1,5 +1,5 @@
 #!/bin/bash
-cd /var/www/html/logistic-management-system-backend
+cd /var/www/html/[project name]
 git pull origin main
 rm -rf dist
 npm install

@@ -13,11 +13,11 @@ definitions:
               MODE: 'script'
           - npm install
           - export NODE_OPTIONS="--max-old-space-size=4096"
-          - npm run $CI_BUILD_SCRIPT --verbose
+          - npm run build --verbose
           - apt-get update && apt-get install -y rsync openssh-client
           - echo 'HostKeyAlgorithms +ssh-rsa' >> ~/.ssh/config
           - echo 'PubkeyAcceptedAlgorithms +ssh-rsa' >> ~/.ssh/config
-          - rsync -e "ssh -p $CI_PORT" --delete --force --fake-super --owner --group -r dist/ $CI_USERNAME@$CI_HOST:/var/www/html/logistic-management-system-backend/dist
+          - rsync -e "ssh -p $CI_PORT" --delete --force --fake-super --owner --group -r dist/ $CI_USERNAME@$CI_HOST:/var/www/html/[project name]/dist
           - pipe: atlassian/ssh-run:0.4.2
             variables:
               SSH_USER: $CI_USERNAME

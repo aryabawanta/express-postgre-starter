@@ -1,3 +1,3 @@
 #!/bin/bash
-cd /var/www/html/logistic-management-system-backend
-pm2 restart logistic-management-system-backend --update-env
+cd /var/www/html/[project name]
+pm2 restart [project name] --update-env
